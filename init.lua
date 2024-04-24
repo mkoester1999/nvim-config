@@ -17,36 +17,22 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-local plugins = 
-{
-	--Catpuccin color theme
-	{"catppuccin/nvim", name = "catppuccin", priority = 1000},
-    	--Telescope
-	{
-    		'nvim-telescope/telescope.nvim', tag = '0.1.6',
-      		dependencies = { 'nvim-lua/plenary.nvim' }
-    	},
-	--Treesitter
-	{"nvim-treesitter/nvim-treesitter", build = ":TSUpdate"}
-}
 
 local opts = {}
 
-require("lazy").setup(plugins, opts)
+-- run lazy setup. "Plugins" option pulls from lua/plugins.lua 
+require("lazy").setup("plugins")
 
 --setup Telescope
 local builtin = require("telescope.builtin")
 
 --setup treesitter
-local config = require("nvim-treesitter.configs")
-config.setup({
-	ensure_installed = {"lua", "python", "cpp"},
+local configs = require("nvim-treesitter.configs")
+configs.setup({
+	ensure_installed = {"lua", "python"},
 	highlight = {enable = true},
-	indent = {enable = true}
+	indent = {enable = true},
 })
---setup catppuccin
-require("catppuccin").setup()
-vim.cmd.colorscheme "catppuccin"
 
 --keymaps
 --Telescope
@@ -55,3 +41,5 @@ vim.keymap.set('n', '<C-p>', builtin.find_files, {})
 --find grep
 vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
 
+--launch neotree
+vim.keymap.set('n', '<C-n>', ':Neotree filesystem reveal left<CR>', {}) 
